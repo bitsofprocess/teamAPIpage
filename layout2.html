@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="layout2.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;500&display=swap" rel="stylesheet">
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1315.0.min.js"></script>
+    <script src="functions.js"></script>
+</head>
+<body>
+    <div class="top-container">
+        
+        <div class="tl-container">
+          
+            <div class="inner-tl">
+                <div class="stage-select">
+                    <label for="stage-select">Stage:</label>
+                    <select id="stage-select" onchange="set_stage()">
+                    <option value="https://dmp3yci3ik.execute-api.us-east-1.amazonaws.com/apptest">Apptest</option>
+                    <option value="https://um3yc1sge3.execute-api.us-east-1.amazonaws.com/dev">Develop</option>
+                    <option value="https://grvmieojsd.execute-api.us-east-1.amazonaws.com/prod">Production</option>
+                    </select>
+                </div>
+
+                <form>
+                    <label for="nameValue" class="input">Search by Name:</label>
+                    <input type="text" id="nameValue" placeholder="Name">
+                    <option value="">-- Accounts --</option>
+                    <option value="name"></option>
+                    <option value="Email"></option>
+                    <option value="phone_number"></option>
+                    </select>
+                    <!-- <label for="attribute-select">Search by Attribute:</label>
+                    <select id="attributeName" onchange="set_search_attribute()">
+                    <option value="">-- Choose an Attribute --</option>
+                    <option value="name">Name</option>
+                    <option value="Email">Email</option>
+                    <option value="phone_number">Phone Number</option>
+                    </select>
+                    <div class="field">
+                    <label for="attributeValue" class="input">Attribute:</label>
+                    <input type="text" id="attributeValue" placeholder="Attribute">
+                    <button type="submit" onclick="getUser(attributeName, attributeValue)">
+                    send
+                    </button>
+
+                    <select id="accounts-select" onchange="set_account()">
+                        <option value="">-- Select Account --</option>
+                        <option value=""></option>
+                        <option value=""></option>
+                    </select>
+
+                    </div> -->
+
+                </form>
+
+               
+
+            </div>
+            <div class="inner-bl">
+                inner-bl
+            </div>
+        </div>
+        <div class="tr-container">
+            tr-container
+        </div>
+    </div>
+    <div class="terminal">
+        Terminal
+    </div>
+</body>
+</html>
