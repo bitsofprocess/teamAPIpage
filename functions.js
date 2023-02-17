@@ -1,11 +1,51 @@
+// const AWS = require("aws-sdk");
+// require('dotenv').config();
+// import {AWS} from 'aws-sdk';
+
+
+
+// const myCredentials = {
+//   accessKeyId: process.env.ACCESS_KEY,
+//   secretAccessKey: process.env.SECRET_KEY,
+// };
+
+AWS.config = new AWS.Config({
+  credentials: myCredentials,
+  region: "us-east-1",
+});
+
+const documentClient = new AWS.DynamoDB.DocumentClient();
+const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+
+const CURRENTSTAGE = 'apptest';
+const ENVTABLENAME = 'env';
+
 let BASE_URL = "https://dmp3yci3ik.execute-api.us-east-1.amazonaws.com/apptest"
     let request_log
     let response_log
     let team_response_log
 
+let attributeName;
+let attributeValue;
+let userEmail;
+
+    const set_search_attribute = () => {
+      attributeName = document.getElementById("attributeName").value;
+      // console.log(attributeName);
+    }
+
+    set_attribute_value = () => {
+      attributeValue = document.getElementById("attributeValue").value;
+      console.log('attributeValue: ', attributeValue);
+    }
+
+    set_user_email = () => {
+      userEmail = document.getElementById("userEmail").value;
+    }
+
     const set_stage = async () => {
       BASE_URL = document.getElementById("stage-select").value;
-      console.log('BASE_URL: ', BASE_URL);
+      // console.log('BASE_URL: ', BASE_URL);
     }
 
     const on_load = () => {
@@ -154,3 +194,76 @@ Body: ${JSON.stringify(body)}
     }
 
     window.addEventListener("load", on_load, false)
+
+    /* TO BE ADDED AS LAMBDA */
+
+    function getUserByEmail() {
+      userEmail = document.getElementById("userEmail").value
+  
+      return new Promise(async (resolve, reject) => {
+        const user = {};
+    
+        const envParams = {
+          TableName: ENVTABLENAME,
+          Key: {
+            environment: CURRENTSTAGE,
+          },
+        };
+        // Get env table from dynamo
+        const envTable = (await documentClient.get(envParams).promise()).Item;
+        // Get user pool value from the env table
+        const USERPOOLID = envTable["user pool"];
+    
+        // -- Get user from cognito
+        // -- get refresh token from user data
+        const params = {
+          UserPoolId: USERPOOLID,
+          // AttributesToGet: attributesToGet,
+          Filter: `email = '${userEmail}'`,
+          Limit: "60",
+        };
+    
+        try {
+          await new Promise((resolve, reject) => {
+            cognitoidentityserviceprovider.listUsers(params, function (err, data) {
+              if (err) {
+                console.log(err, err.stack, "listUsers-error");
+                user.user_id = userId;
+                reject("failed");
+              } // an error occurred
+              else {
+    
+                  data.Users.forEach((element,index) => {
+                    element.Attributes.forEach((attribute) => {
+                      data.Users[index][attribute.Name] = attribute.Value;
+                    });
+                    delete data.Users[index].Attributes;
+                    if (element.identities) {
+                      data.Users[index]["providerName"] = JSON.parse(data.Users[index].identities)[0].providerName;
+                    } else if (element["custom:microsoftToken"]) {
+                      data.Users[index]["providerName"] = "Microsoft"
+                    } else {
+                      data.Users[index]["providerName"] = "Email/Password"
+                    }
+                    delete data.Users[index].identities
+                  
+                  })
+                  
+                  data.Users.forEach((element,index) => {
+                    console.log(data.Users[index]);
+                  })
+    
+          
+                resolve("success");
+              } // successful response
+            });
+          });
+          if (attributesToGet.includes("UserPoolId")) {
+            user["UserPoolId"] = USERPOOLID;
+          }
+          resolve(user);
+        } catch (error) {
+          resolve({ error: "failed" });
+        }
+      });
+    }
