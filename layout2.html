@@ -10,32 +10,78 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1315.0.min.js"></script>
     <script src="functions.js"></script>
 </head>
 <body>
+    <div class="top-bar">
+        <img src="logo_heylime.png" class="logo">
+        <span class="stage-select">
+            <label for="stage-select">Stage:</label>
+            <select id="stage-select" onchange="set_stage()">
+            <option value="https://dmp3yci3ik.execute-api.us-east-1.amazonaws.com/apptest">Apptest</option>
+            <option value="https://um3yc1sge3.execute-api.us-east-1.amazonaws.com/dev">Develop</option>
+            <option value="https://grvmieojsd.execute-api.us-east-1.amazonaws.com/prod">Production</option>
+
+            </select>
+        </span>
+    </div>
     <div class="top-container">
-        
+
         <div class="tl-container">
           
-            <div class="inner-tl">
-                <div class="stage-select">
-                    <label for="stage-select">Stage:</label>
-                    <select id="stage-select" onchange="set_stage()">
-                    <option value="https://dmp3yci3ik.execute-api.us-east-1.amazonaws.com/apptest">Apptest</option>
-                    <option value="https://um3yc1sge3.execute-api.us-east-1.amazonaws.com/dev">Develop</option>
-                    <option value="https://grvmieojsd.execute-api.us-east-1.amazonaws.com/prod">Production</option>
-                    </select>
-                </div>
+            <div class="inner-top">
+         
 
+                <h2>Search by:</h2>
                 <form>
-                    <label for="nameValue" class="input">Search by Name:</label>
-                    <input type="text" id="nameValue" placeholder="Name">
+                    <label for="nameValue" class="input">Name:</label>
+                    <input type="text" id="nameValue" placeholder="ex: John Smith">
+                       
+                        <span class="material-symbols-outlined">
+                            search
+                        </span>
+                    <select>
                     <option value="">-- Accounts --</option>
                     <option value="name"></option>
                     <option value="Email"></option>
                     <option value="phone_number"></option>
                     </select>
+                    
+                    <br>
+
+                    <label for="userIdValue" class="input">User ID:</label>
+                    <input type="text" id="userIdValue" placeholder="ex: 0029d107-16df-43a7-9948-9f3fdfe57342">
+                       
+                        <button class="material-symbols-outlined" onclick="get_user_attributes()">
+                            search
+                        </button>
+                        <button>Populate</button>
+                    <br>
+
+                    <label for="emailValue" class="input">User Email:</label>
+                    <input type="text" id="emailValue" placeholder="ex: user@gmail.com">
+                       
+                        <span class="material-symbols-outlined">
+                            search
+                        </span>
+                        <button>Populate</button>
+                    <select>
+                        <option value="">-- Search by --</option>
+                        <option value="userId-attribute">user ID</option>
+                        <option value="email-attribute">email</option>
+                    </select>
+                    <input type="text" id="attributeValue" placeholder="attributeValue">
+
+                    <select>
+                        <option value="">-- Results --</option>
+                        <option value="name"></option>
+                        <option value="Email"></option>
+                        <option value="phone_number"></option>
+                    </select>
+
                     <!-- <label for="attribute-select">Search by Attribute:</label>
                     <select id="attributeName" onchange="set_search_attribute()">
                     <option value="">-- Choose an Attribute --</option>
@@ -63,16 +109,81 @@
                
 
             </div>
-            <div class="inner-bl">
-                inner-bl
+            <div class="inner-bottom">
+                <h2 class="details">User Details</h2>
+            </div>
+        </div>
+        <div class="tm-container">
+            <div class="inner-top">
+                <h2>Team Search</h2>
+                <form>
+                    <input type="text" id="get-team-teamCode" placeholder="teamCode" />
+                    <button type="submit" onclick="get_team()">send</button>
+                </form>
+            </div>
+            <div class="inner-bottom">
+                <h2 class="details">Team Details</h2>
             </div>
         </div>
         <div class="tr-container">
-            tr-container
+            <div class="inner-top">
+                <h2>Actions</h2>
+                <div class="create-team">
+                    <h3>Create Team</h3>
+                    <input type="text" id="firstName" placeholder="firstName" />
+                    <input type="text" id="lastName" placeholder="lastName" />
+                    <input type="text" id="email" placeholder="email" />
+                    <input type="text" id="businessName" placeholder="businessName" />
+                    <input type="text" id="userId" placeholder="userId" />
+                    <button type="submit" onclick="genereate_new_promocode()">
+                      send
+                    </button>
+                </div>
+
+                <div class="add-to-team">
+                    <h3>Add User To Team</h3>
+                    <!-- <div class="form"> -->
+                      <input type="text" id="add-to-team-user-id" placeholder="userId" />
+                      <input type="text" id="add-to-team-promocode" placeholder="promoCode" />
+                      <button type="submit" onclick="add_user_to_team()">send</button>
+                </div>
+
+                <div class="remove-from-team">
+                    <h3>Remove User From Team</h3>
+                    <!-- <div class="form"> -->
+                      <input type="text" id="remove-from-team-user-id" placeholder="userId" />
+                      <input type="text" id="remove-from-team-promocode" placeholder="promoCode" />
+                      <button type="submit" onclick="remove_from_team()">send</button>
+                    <!-- </div> -->
+                </div>
+
+                <div class="change-team">
+                    <h3>Change Team</h3>
+                    <!-- <div class="form"> -->
+                      <input type="text" id="change-team-user-id" placeholder="userId" />
+                      <input type="text" id="change-team-from" placeholder="from" />
+                      <input type="text" id="change-team-to" placeholder="to" />
+                      <button type="submit" onclick="change_team()">send</button>
+                    <!-- </div> -->
+                  </div>
+                
+                <div class="get-team-link">
+                    <h3>Get Magic Link</h3>
+                    <!-- <div class="form"> -->
+                        <input type="text" id="get-team-link-teamCode" placeholder="teamCode" />
+                        <input type="text" id="get-team-link-userName" placeholder="userName" />
+                        <button type="submit" onclick="get_team_link()">send</button>
+                    <!-- </div> -->
+                </div>
+
+            </div>
+            <div class="inner-bottom">
+                <h2 class="details">Action Details</h2>
+            </div>
         </div>
     </div>
     <div class="terminal">
-        Terminal
+        <h2 id="response-log">Request/Response Log</h2>
     </div>
 </body>
 </html>
