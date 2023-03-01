@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>HeyLime Team Page</title>
 
     <link rel="stylesheet" href="layout2.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,10 +13,12 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1315.0.min.js"></script>
+    <script src="credentials.js"></script>
     <script src="functions.js"></script>
+
 </head>
 <body>
-    <div class="top-bar">
+    <div class="top-bar">   
         <img src="logo_heylime.png" class="logo">
         <span class="stage-select">
             <label for="stage-select">Stage:</label>
@@ -36,13 +38,14 @@
          
 
                 <h2>Search by:</h2>
-                <form>
+          
                     <label for="nameValue" class="input">Name:</label>
                     <input type="text" id="nameValue" placeholder="ex: John Smith">
                        
-                        <span class="material-symbols-outlined">
+                        <button type="submit" class="material-symbols-outlined" onclick="getUserByName()">
                             search
-                        </span>
+                        </button>
+                        <button>Populate</button>
                     <select>
                     <option value="">-- Accounts --</option>
                     <option value="name"></option>
@@ -52,22 +55,29 @@
                     
                     <br>
 
+                    <!-- <div class="form">
+                        <input type="text" id="userIdValue" placeholder="userId" />
+                        <button type="submit" onclick="get_user_attributes()">
+                          submit
+                        </button>
+                    </div> -->
+
                     <label for="userIdValue" class="input">User ID:</label>
-                    <input type="text" id="userIdValue" placeholder="ex: 0029d107-16df-43a7-9948-9f3fdfe57342">
+                    <input type="text" id="userIdValue" placeholder="ex: 0029d107-16df-43a7-9948-9f3fdfe57342"> 
                        
-                        <button class="material-symbols-outlined" onclick="get_user_attributes()">
+                       <button type="submit" class="material-symbols-outlined" onclick="get_user_attributes()">
                             search
                         </button>
                         <button>Populate</button>
                     <br>
-
-                    <label for="emailValue" class="input">User Email:</label>
-                    <input type="text" id="emailValue" placeholder="ex: user@gmail.com">
-                       
-                        <span class="material-symbols-outlined">
-                            search
-                        </span>
+                    <div class="form">
+                        <input type="text" id="emailValue" placeholder="userEmail" />
+                        <button type="submit" class="material-symbols-outlined" onclick="getUserByEmail()">
+                        search
+                        </button>
                         <button>Populate</button>
+                    </div>
+              
                     <select>
                         <option value="">-- Search by --</option>
                         <option value="userId-attribute">user ID</option>
@@ -81,33 +91,6 @@
                         <option value="Email"></option>
                         <option value="phone_number"></option>
                     </select>
-
-                    <!-- <label for="attribute-select">Search by Attribute:</label>
-                    <select id="attributeName" onchange="set_search_attribute()">
-                    <option value="">-- Choose an Attribute --</option>
-                    <option value="name">Name</option>
-                    <option value="Email">Email</option>
-                    <option value="phone_number">Phone Number</option>
-                    </select>
-                    <div class="field">
-                    <label for="attributeValue" class="input">Attribute:</label>
-                    <input type="text" id="attributeValue" placeholder="Attribute">
-                    <button type="submit" onclick="getUser(attributeName, attributeValue)">
-                    send
-                    </button>
-
-                    <select id="accounts-select" onchange="set_account()">
-                        <option value="">-- Select Account --</option>
-                        <option value=""></option>
-                        <option value=""></option>
-                    </select>
-
-                    </div> -->
-
-                </form>
-
-               
-
             </div>
             <div class="inner-bottom">
                 <h2 class="details">User Details</h2>
@@ -116,10 +99,10 @@
         <div class="tm-container">
             <div class="inner-top">
                 <h2>Team Search</h2>
-                <form>
+                
                     <input type="text" id="get-team-teamCode" placeholder="teamCode" />
                     <button type="submit" onclick="get_team()">send</button>
-                </form>
+                
             </div>
             <div class="inner-bottom">
                 <h2 class="details">Team Details</h2>
@@ -182,8 +165,9 @@
             </div>
         </div>
     </div>
-    <div class="terminal">
-        <h2 id="response-log">Request/Response Log</h2>
+    <div class="bottom">
+        <h2 id="terminal-header">Request/Response Log</h2>
+        <pre id="terminal"></pre>
     </div>
 </body>
 </html>
