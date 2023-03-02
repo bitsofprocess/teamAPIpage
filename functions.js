@@ -28,6 +28,9 @@ let BASE_URL = "https://dmp3yci3ik.execute-api.us-east-1.amazonaws.com/apptest"
 let attributeName;
 let attributeValue;
 let userEmail;
+let userName;
+let userId;
+let userDetails;
 
     const set_search_attribute = () => {
       attributeName = document.getElementById("attributeName").value;
@@ -49,18 +52,18 @@ let userEmail;
     }
 
     const on_load = () => {
-      request_log = document.getElementById("request-log")
-      response_log = document.getElementById("response-log")
+      terminal = document.getElementById("terminal")
+      // response_log = document.getElementById("response-log")
       team_response_log = document.getElementById("team-response-log")
     }
 
-    const toggle_loader = (flag) => {
-      if (flag) {
-        document.getElementById("loader").style.display = "block"
-      } else {
-        document.getElementById("loader").style.display = "none"
-      }
-    }
+    // const toggle_loader = (flag) => {
+    //   if (flag) {
+    //     document.getElementById("loader").style.display = "block"
+    //   } else {
+    //     document.getElementById("loader").style.display = "none"
+    //   }
+    // }
 
     function write_request({ url, method, body }) {
       var pre = document.createElement("p")
@@ -70,10 +73,10 @@ URL: ${url}
 Method: ${method}
 Body: ${JSON.stringify(body)}
       `
-      if (request_log.hasChildNodes()) {
-        request_log.insertBefore(pre, request_log.childNodes[0])
+      if (terminal.hasChildNodes()) {
+        terminal.insertBefore(pre, terminal.childNodes[0])
       } else {
-        request_log.appendChild(pre)
+        terminal.appendChild(pre)
       }
     }
 
@@ -81,10 +84,10 @@ Body: ${JSON.stringify(body)}
       var pre = document.createElement("p")
       pre.style.wordWrap = "break-word"
       pre.innerHTML = Date().toString() + "\n" + message
-      if (response_log.hasChildNodes()) {
-        response_log.insertBefore(pre, response_log.childNodes[0])
+      if (terminal.hasChildNodes()) {
+        terminal.insertBefore(pre, terminal.childNodes[0])
       } else {
-        response_log.appendChild(pre)
+        terminal.appendChild(pre)
       }
     }
 
@@ -93,15 +96,15 @@ Body: ${JSON.stringify(body)}
       pre.style.wordWrap = "break-word"
       pre.innerHTML =
         Date().toString() + "\n" + JSON.stringify(message, null, 4)
-      if (team_response_log.hasChildNodes()) {
-        team_response_log.removeChild(team_response_log.childNodes[0])
+      if (terminal.hasChildNodes()) {
+        terminal.removeChild(terminal.childNodes[0])
       }
-      team_response_log.appendChild(pre)
+      terminal.appendChild(pre)
     }
 
     const call_api = async ({ url, method, body }) => {
       write_request({ url, method, body })
-      toggle_loader(true)
+      // toggle_loader(true)
       try {
         const response = await fetch(url, {
           method,
@@ -110,14 +113,54 @@ Body: ${JSON.stringify(body)}
             "Content-Type": "application/json",
           },
         })
-        const data = await response.json()
+        const data = await response.json();
+        userDetails = data;
         write_response(JSON.stringify(data))
-        toggle_loader(false)
+        // toggle_loader(false)
         return data
       } catch (error) {
         write_response(JSON.stringify(error))
-        toggle_loader(false)
+        // toggle_loader(false)
       }
+    }
+
+    const displayUserDetails = (userDetails) => {
+      console.log('displayUserDetails: ', userDetails);
+      console.log('username: ', userDetails.Username);
+      console.log('email: ', userDetails.email);
+      console.log('team code: ', userDetails["custom:promocode"]);
+      const userDetailsWindow = document.getElementById("user-details");
+      // let userIdDetails = userDetails.Username;
+      // let userEmailDetails = userDetails.email;
+
+      let pre = document.createElement("p")
+      pre.style.wordWrap = "break-word"
+      pre.innerHTML +=  `
+        <tr>
+          <td>User Id: ${userDetails.Username}</td>
+          <td>Email: ${userDetails.email}</td>   
+        </tr>
+      `
+      if (userDetailsWindow.hasChildNodes()) {
+        userDetailsWindow.insertBefore(pre, userDetailsWindow.childNodes[0])
+      } else {
+        userDetailsWindow.appendChild(pre)
+      }
+      
+      // .then(response => response.json())
+      //           .then(data => {
+      //               for (var i = 0; i<data.items.length; i++){
+      //                   let vmovieID = data.items[i].movieID;
+      //                   let vtitle = data.items[i].title;
+      //                   let vposter = data.items[i].poster;
+      //                       document.querySelector("#tb1").innerHTML += `
+      //                           <tr>
+      //                               <td>${vmovieID}</td>
+      //                               <td>${vtitle}</td>
+      //                               <td>${vposter}</td>
+      //                           </tr>`;
+      //               }
+      //           })
     }
 
     const genereate_new_promocode = async () => {
@@ -135,13 +178,14 @@ Body: ${JSON.stringify(body)}
     }
 
     const get_user_attributes = async () => {
-      const id = document.getElementById("id").value
+      const id = document.getElementById("userIdValue").value
       await call_api({
         url: `${BASE_URL}/getCognitoUserAttributes/${id}`,
         method: "GET"
       })
+      displayUserDetails(userDetails);
     }
-
+    
     const add_user_to_team = async () => {
       const user_id = document.getElementById("add-to-team-user-id").value
       const promocode = document.getElementById("add-to-team-promocode").value
@@ -184,7 +228,7 @@ Body: ${JSON.stringify(body)}
     }
 
     const get_team = async () => {
-      toggle_loader(true)
+      // toggle_loader(true)
       const teamCode = document.getElementById("get-team-teamCode").value
       const team = await call_api({
         url: `${BASE_URL}/getTeam/${teamCode}`,
@@ -197,8 +241,8 @@ Body: ${JSON.stringify(body)}
 
     /* TO BE ADDED AS LAMBDA */
 
-    function getUserByEmail() {
-      userEmail = document.getElementById("userEmail").value
+    const getUserByEmail = async () => {
+      userEmail = document.getElementById("emailValue").value
   
       return new Promise(async (resolve, reject) => {
         const user = {};
@@ -251,6 +295,7 @@ Body: ${JSON.stringify(body)}
                   
                   data.Users.forEach((element,index) => {
                     console.log(data.Users[index]);
+                    // write_response(JSON.stringify(data.Users[index]))
                   })
     
           
@@ -261,6 +306,154 @@ Body: ${JSON.stringify(body)}
           if (attributesToGet.includes("UserPoolId")) {
             user["UserPoolId"] = USERPOOLID;
           }
+          resolve(user);
+          
+          // write_response(JSON.stringify(user));
+        } catch (error) {
+          resolve({ error: "failed" });
+        }
+      });
+    }
+
+    const getUserByName = async () => {
+      userName = document.getElementById("nameValue").value;
+
+      return new Promise(async (resolve, reject) => {
+        const user = {};
+    
+        const envParams = {
+          TableName: ENVTABLENAME,
+          Key: {
+            environment: CURRENTSTAGE,
+          },
+        };
+        // Get env table from dynamo
+        const envTable = (await documentClient.get(envParams).promise()).Item;
+        // Get user pool value from the env table
+        const USERPOOLID = envTable["user pool"];
+    
+        // -- Get user from cognito
+        // -- get refresh token from user data
+        const params = {
+          UserPoolId: USERPOOLID,
+          // AttributesToGet: attributesToGet,
+          Filter: `name = '${userName}'`,
+          Limit: "1",
+        };
+    
+        try {
+          await new Promise((resolve, reject) => {
+            cognitoidentityserviceprovider.listUsers(params, function (err, data) {
+              if (err) {
+                console.log(err, err.stack, "listUsers-error");
+                user.user_id = userId;
+                reject("failed");
+              } // an error occurred
+              else {
+    
+                console.log(`data: ${JSON.stringify(data, null, 2)}`);
+                console.log(`data.Users: ${JSON.stringify(data.Users, null, 2)}`);
+    
+    
+                if (data && data.Users && data.Users.length == 0) {
+                  reject("failed");
+                } else if (attributesToGet.length == 0) {
+                  user["Username"] = data.Users[0].Username;
+                  data.Users[0].Attributes.forEach((attribute) => {
+                    user[attribute.Name] = attribute.Value;
+                  });
+                } else if (data && data.Users && data.Users.length > 0) {
+                  for (let key in data.Users[0]) {
+                    if (attributesToGet.includes(key)) {
+                      user[key] = data.Users[0][key];
+                    }
+                  }
+                  data.Users[0].Attributes.forEach((attribute) => {
+                    if (attributesToGet.includes(attribute.Name)) {
+                      user[attribute.Name] = attribute.Value;
+                    }
+                  });
+                }
+                resolve("success");
+              } // successful response
+            });
+          });
+          if (attributesToGet.includes("UserPoolId")) {
+            user["UserPoolId"] = USERPOOLID;
+          }
+          // console.log(user);
+          resolve(user);
+        } catch (error) {
+          resolve({ error: "failed" });
+        }
+      });
+    }
+
+    function listUserByName() {
+      return new Promise(async (resolve, reject) => {
+        const user = {};
+    
+        const envParams = {
+          TableName: ENVTABLENAME,
+          Key: {
+            environment: CURRENTSTAGE,
+          },
+        };
+        // Get env table from dynamo
+        const envTable = (await documentClient.get(envParams).promise()).Item;
+        // Get user pool value from the env table
+        const USERPOOLID = envTable["user pool"];
+    
+        // -- Get user from cognito
+        // -- get refresh token from user data
+        const params = {
+          UserPoolId: USERPOOLID,
+          // AttributesToGet: attributesToGet,
+          Filter: `name ^= '${name}'`,
+          Limit: "60",
+        };
+    
+        try {
+          await new Promise((resolve, reject) => {
+            cognitoidentityserviceprovider.listUsers(params, function (err, data) {
+              if (err) {
+                console.log(err, err.stack, "listUsers-error");
+                user.name = name;
+                reject("failed");
+              } // an error occurred
+              else {
+    
+                console.log(`data: ${JSON.stringify(data, null, 2)}`);
+                console.log(`data.Users: ${JSON.stringify(data.Users, null, 2)}`);
+    
+    
+                if (data && data.Users && data.Users.length == 0) {
+                  reject("failed");
+                } else if (attributesToGet.length == 0) {
+                  user["Username"] = data.Users[0].Username;
+                  data.Users[0].Attributes.forEach((attribute) => {
+                    user[attribute.Name] = attribute.Value;
+                  });
+                } else if (data && data.Users && data.Users.length > 0) {
+                  for (let key in data.Users[0]) {
+                    if (attributesToGet.includes(key)) {
+                      user[key] = data.Users[0][key];
+                    }
+                  }
+                  data.Users[0].Attributes.forEach((attribute) => {
+                    if (attributesToGet.includes(attribute.Name)) {
+                      user[attribute.Name] = attribute.Value;
+                    }
+                  });
+                }
+                resolve("success");
+              } // successful response
+            });
+          });
+          if (attributesToGet.includes("UserPoolId")) {
+            user["UserPoolId"] = USERPOOLID;
+          }
+          // console.log(user);
           resolve(user);
         } catch (error) {
           resolve({ error: "failed" });
