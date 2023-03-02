@@ -42,7 +42,7 @@
                     <label for="nameValue" class="input">Name:</label>
                     <input type="text" id="nameValue" placeholder="ex: John Smith">
                        
-                        <button type="submit" class="material-symbols-outlined" onclick="getUserByName()">
+                        <button type="submit" class="material-symbols-outlined" onclick="listUserByName()">
                             search
                         </button>
                         <button>Populate</button>
@@ -71,6 +71,7 @@
                         <button>Populate</button>
                     <br>
                     <div class="form">
+                        <label for="emailValue" class="input">User Email:</label>
                         <input type="text" id="emailValue" placeholder="userEmail" />
                         <button type="submit" class="material-symbols-outlined" onclick="getUserByEmail()">
                         search
@@ -84,6 +85,10 @@
                         <option value="email-attribute">email</option>
                     </select>
                     <input type="text" id="attributeValue" placeholder="attributeValue">
+                    <button type="submit" class="material-symbols-outlined" onclick="getUserByEmail()">
+                        search
+                        </button>
+                        <button>Populate</button>
 
                     <select>
                         <option value="">-- Results --</option>
@@ -94,6 +99,9 @@
             </div>
             <div class="inner-bottom">
                 <h2 class="details">User Details</h2>
+                <div id="user-details">
+
+                </div>
             </div>
         </div>
         <div class="tm-container">
@@ -105,7 +113,7 @@
                 
             </div>
             <div class="inner-bottom">
-                <h2 class="details">Team Details</h2>
+                <h2 class="details" id="team-details">Team Details</h2>
             </div>
         </div>
         <div class="tr-container">
