@@ -125,22 +125,30 @@ Body: ${JSON.stringify(body)}
     }
 
     const displayUserDetails = (userDetails) => {
-      console.log('displayUserDetails: ', userDetails);
-      console.log('username: ', userDetails.Username);
-      console.log('email: ', userDetails.email);
-      console.log('team code: ', userDetails["custom:promocode"]);
+      // console.log('displayUserDetails: ', userDetails);
+      // console.log('username: ', userDetails.Username);
+      // console.log('email: ', userDetails.email);
+      // console.log('team code: ', userDetails["custom:promocode"]);
+      // console.log('business/team name: ', userDetails["custom:promodescription"]);
+      // console.log('provider name: ', userDetails["providerName"]);
       const userDetailsWindow = document.getElementById("user-details");
       // let userIdDetails = userDetails.Username;
       // let userEmailDetails = userDetails.email;
 
       let pre = document.createElement("p")
       pre.style.wordWrap = "break-word"
-      pre.innerHTML +=  `
-        <tr>
-          <td>User Id: ${userDetails.Username}</td>
-          <td>Email: ${userDetails.email}</td>   
-        </tr>
-      `
+      pre.innerHTML +=  
+        '<h4>User Id:</h4> ' + userDetails.Username +
+        '<h4>Email:</h4> ' + userDetails.email + 
+        '<h4>Team Code:</h4> ' + userDetails["custom:promocode"] +
+        '<h4>Business/Team Name:</h4> ' + userDetails["custom:promodescription"] +
+        '<h4>Provider Name:</h4> ' + userDetails["providerName"];
+      // `
+      //   <tr>
+      //     <td>User Id: ${userDetails.Username}</td>
+      //     <td>Email: ${userDetails.email}</td>   
+      //   </tr>
+      // `
       if (userDetailsWindow.hasChildNodes()) {
         userDetailsWindow.insertBefore(pre, userDetailsWindow.childNodes[0])
       } else {
@@ -227,6 +235,30 @@ Body: ${JSON.stringify(body)}
       })
     }
 
+    const displayTeamDetails = async (team) => {
+      const userDetailsWindow = document.getElementById("team-details");
+      
+      console.log('team: ', team);
+      console.log('team.data: ', team.data);
+   
+      
+
+      let pre = document.createElement("p")
+      pre.style.wordWrap = "break-word"
+      pre.innerHTML +=  
+        '<h4>User Id:</h4> ' + userDetails.Username +
+        '<h4>Email:</h4> ' + userDetails.email + 
+        '<h4>Team Code:</h4> ' + userDetails["custom:promocode"] +
+        '<h4>Business/Team Name:</h4> ' + userDetails["custom:promodescription"] +
+        '<h4>Provider Name:</h4> ' + userDetails["providerName"];
+
+      if (userDetailsWindow.hasChildNodes()) {
+        userDetailsWindow.insertBefore(pre, userDetailsWindow.childNodes[0])
+      } else {
+        userDetailsWindow.appendChild(pre)
+      }
+    }
+
     const get_team = async () => {
       // toggle_loader(true)
       const teamCode = document.getElementById("get-team-teamCode").value
@@ -234,7 +266,8 @@ Body: ${JSON.stringify(body)}
         url: `${BASE_URL}/getTeam/${teamCode}`,
         method: "GET",
       })
-      write_team(team)
+      write_team(team);
+      displayTeamDetails(team);
     }
 
     window.addEventListener("load", on_load, false)
@@ -298,7 +331,9 @@ Body: ${JSON.stringify(body)}
                     // write_response(JSON.stringify(data.Users[index]))
                   })
     
-          
+                // console.log(data.Users[0]);
+                userDetails = data.Users;
+                userDetails.forEach(displayUserDetails)
                 resolve("success");
               } // successful response
             });
@@ -459,4 +494,25 @@ Body: ${JSON.stringify(body)}
           resolve({ error: "failed" });
         }
       });
+    }
+
+    const openAction = (evt, action) => {
+      // Declare all variables
+      var i, tabcontent, tablinks;
+    
+      // Get all elements with class="tabcontent" and hide them
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+    
+      // Get all elements with class="tablinks" and remove the class "active"
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+    
+      // Show the current tab, and add an "active" class to the button that opened the tab
+      document.getElementById(action).style.display = "block";
+      evt.currentTarget.className += " active";
     }
