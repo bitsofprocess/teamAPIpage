@@ -325,7 +325,19 @@ Body: ${JSON.stringify(body)}
                   })
                   
                   data.Users.forEach((element,index) => {
-                    console.log(data.Users[index]);
+                    console.log(data.Users[index].providerName);
+
+                    // var json = { "data": ["orange", "banana", "apple", "pear"] };
+
+                    const emailDropdown = document.getElementById("emailDropdown");
+
+                    // for (var i = 0; i < json.data.length; i++) {
+                      var option = document.createElement("option");
+                      option.text = data.Users[index].providerName;
+                      option.value = data.Users[index].providerName;
+                      emailDropdown.add(option);
+                    // }
+                    
                     // write_response(JSON.stringify(data.Users[index]))
                   })
     
@@ -513,4 +525,20 @@ Body: ${JSON.stringify(body)}
       // Show the current tab, and add an "active" class to the button that opened the tab
       document.getElementById(action).style.display = "block";
       evt.currentTarget.className += " active";
+    }
+
+
+
+    const populateEmailDropdown = async () => {
+      console.log(object);
+      // var json = { "data": ["orange", "banana", "apple", "pear"] };
+
+      const emailDropdown = document.getElementById("emailDropdown");
+
+      // for (var i = 0; i < json.data.length; i++) {
+      //   var option = document.createElement("option");
+      //   option.text = json.data[i];
+      //   option.value = json.data[i];
+      //   dropdown.add(option);
+      // }
     }
