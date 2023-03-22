@@ -30,7 +30,7 @@ let attributeValue;
 let userEmail;
 let userName;
 let userId;
-let userDetails;
+// let userDetails;
 
     const set_search_attribute = () => {
       attributeName = document.getElementById("attributeName").value;
@@ -124,16 +124,10 @@ Body: ${JSON.stringify(body)}
       }
     }
 
+    // Reference: https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_onchange
     const displayUserDetails = (userDetails) => {
-      // console.log('displayUserDetails: ', userDetails);
-      // console.log('username: ', userDetails.Username);
-      // console.log('email: ', userDetails.email);
-      // console.log('team code: ', userDetails["custom:promocode"]);
-      // console.log('business/team name: ', userDetails["custom:promodescription"]);
-      // console.log('provider name: ', userDetails["providerName"]);
+
       const userDetailsWindow = document.getElementById("user-details");
-      // let userIdDetails = userDetails.Username;
-      // let userEmailDetails = userDetails.email;
 
       let pre = document.createElement("p")
       pre.style.wordWrap = "break-word"
@@ -324,26 +318,24 @@ Body: ${JSON.stringify(body)}
                   
                   })
                   
+                  // Reference: https://stackoverflow.com/questions/1085801/get-selected-value-in-dropdown-list-using-javascript
+                  
                   data.Users.forEach((element,index) => {
                     console.log(data.Users[index].providerName);
 
-                    // var json = { "data": ["orange", "banana", "apple", "pear"] };
-
                     const emailDropdown = document.getElementById("emailDropdown");
 
-                    // for (var i = 0; i < json.data.length; i++) {
+    
                       var option = document.createElement("option");
                       option.text = data.Users[index].providerName;
                       option.value = data.Users[index].providerName;
                       emailDropdown.add(option);
-                    // }
-                    
-                    // write_response(JSON.stringify(data.Users[index]))
                   })
-    
-                // console.log(data.Users[0]);
-                userDetails = data.Users;
-                userDetails.forEach(displayUserDetails)
+  
+                const userDetails = data.Users;
+                console.log('***USER DETAILS****:', userDetails);
+                // populateEmailDropdown(userDetails);
+                userDetails.forEach(displayUserDetails);
                 resolve("success");
               } // successful response
             });
@@ -529,11 +521,25 @@ Body: ${JSON.stringify(body)}
 
 
 
-    const populateEmailDropdown = async () => {
-      console.log(object);
+    const populateEmailDropdown = async (userDetails) => {
+
+        userDetails.forEach((element,index) => {
+        console.log(data.Users[index].providerName);
+
+        // var json = { "data": ["orange", "banana", "apple", "pear"] };
+
+        const emailDropdown = document.getElementById("emailDropdown");
+
+        // for (var i = 0; i < json.data.length; i++) {
+          var option = document.createElement("option");
+          option.text = data.Users[index].providerName;
+          option.value = data.Users[index].providerName;
+          emailDropdown.add(option);
+        })
+      // console.log(object);
       // var json = { "data": ["orange", "banana", "apple", "pear"] };
 
-      const emailDropdown = document.getElementById("emailDropdown");
+      // const emailDropdown = document.getElementById("emailDropdown");
 
       // for (var i = 0; i < json.data.length; i++) {
       //   var option = document.createElement("option");
