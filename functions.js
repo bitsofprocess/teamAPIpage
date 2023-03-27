@@ -125,7 +125,9 @@ Body: ${JSON.stringify(body)}
     }
 
     // Reference: https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_onchange
-    const displayUserDetails = (userDetails) => {
+    const displayUserDetails = () => {
+      
+      const userDetails = JSON.parse(document.getElementById("emailDropdown").value);
 
       const userDetailsWindow = document.getElementById("user-details");
 
@@ -137,32 +139,13 @@ Body: ${JSON.stringify(body)}
         '<h4>Team Code:</h4> ' + userDetails["custom:promocode"] +
         '<h4>Business/Team Name:</h4> ' + userDetails["custom:promodescription"] +
         '<h4>Provider Name:</h4> ' + userDetails["providerName"];
-      // `
-      //   <tr>
-      //     <td>User Id: ${userDetails.Username}</td>
-      //     <td>Email: ${userDetails.email}</td>   
-      //   </tr>
-      // `
+ 
       if (userDetailsWindow.hasChildNodes()) {
         userDetailsWindow.insertBefore(pre, userDetailsWindow.childNodes[0])
       } else {
         userDetailsWindow.appendChild(pre)
       }
       
-      // .then(response => response.json())
-      //           .then(data => {
-      //               for (var i = 0; i<data.items.length; i++){
-      //                   let vmovieID = data.items[i].movieID;
-      //                   let vtitle = data.items[i].title;
-      //                   let vposter = data.items[i].poster;
-      //                       document.querySelector("#tb1").innerHTML += `
-      //                           <tr>
-      //                               <td>${vmovieID}</td>
-      //                               <td>${vtitle}</td>
-      //                               <td>${vposter}</td>
-      //                           </tr>`;
-      //               }
-      //           })
     }
 
     const genereate_new_promocode = async () => {
@@ -328,14 +311,18 @@ Body: ${JSON.stringify(body)}
     
                       var option = document.createElement("option");
                       option.text = data.Users[index].providerName;
-                      option.value = data.Users[index].providerName;
+                      option.value = JSON.stringify(element, null, 2);
+                      console.log('element: ', element);
                       emailDropdown.add(option);
+
                   })
   
                 const userDetails = data.Users;
                 console.log('***USER DETAILS****:', userDetails);
                 // populateEmailDropdown(userDetails);
-                userDetails.forEach(displayUserDetails);
+                // userDetails.forEach(displayUserDetails);
+                // userDetails.forEach(userDetail => displayUserDetails(userDetail))
+                
                 resolve("success");
               } // successful response
             });
