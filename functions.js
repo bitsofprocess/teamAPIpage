@@ -129,22 +129,12 @@ Body: ${JSON.stringify(body)}
       
       const userDetails = JSON.parse(document.getElementById("emailDropdown").value);
 
-      const userDetailsWindow = document.getElementById("user-details");
-
-      let pre = document.createElement("p")
-      pre.style.wordWrap = "break-word"
-      pre.innerHTML +=  
+      document.getElementById("user-details").innerHTML = 
         '<h4>User Id:</h4> ' + userDetails.Username +
         '<h4>Email:</h4> ' + userDetails.email + 
         '<h4>Team Code:</h4> ' + userDetails["custom:promocode"] +
         '<h4>Business/Team Name:</h4> ' + userDetails["custom:promodescription"] +
         '<h4>Provider Name:</h4> ' + userDetails["providerName"];
- 
-      if (userDetailsWindow.hasChildNodes()) {
-        userDetailsWindow.insertBefore(pre, userDetailsWindow.childNodes[0])
-      } else {
-        userDetailsWindow.appendChild(pre)
-      }
       
     }
 
