@@ -125,17 +125,34 @@ Body: ${JSON.stringify(body)}
     }
 
     // Reference: https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_onchange
-    const displayUserDetails = () => {
-      
-      const userDetails = JSON.parse(document.getElementById("emailDropdown").value);
 
-      document.getElementById("user-details").innerHTML = 
-        '<h4>User Id:</h4> ' + userDetails.Username +
+    // create button: https://stackoverflow.com/questions/7066191/javascript-onclick-onsubmit-for-dynamically-created-button
+    const displayUserDetails = async (userDetails) => {
+      
+      // const userDetails = JSON.parse(document.getElementById("emailDropdown").value);
+
+      write_response(JSON.stringify(userDetails, null, 2));
+      const userDetailsWindow = document.getElementById("user-details");
+      // document.getElementById("user-details")
+      userDetailsWindow.innerHTML = 
+        '<h4>User Id:</h4> ' + '<span id="username">' + userDetails.Username + '</span>' +
         '<h4>Email:</h4> ' + userDetails.email + 
         '<h4>Team Code:</h4> ' + userDetails["custom:promocode"] +
         '<h4>Business/Team Name:</h4> ' + userDetails["custom:promodescription"] +
         '<h4>Provider Name:</h4> ' + userDetails["providerName"];
+
+      const button = document.createElement("button");
+      button.innerHTML = 'Populate';
+      button.onclick = populateInputs();
+
+      userDetailsWindow.appendChild(button);
       
+    }
+
+    const displayFromEmailValue = async () => {
+      const userDetails = JSON.parse(document.getElementById("emailDropdown").value);
+
+      displayUserDetails(userDetails);
     }
 
     const genereate_new_promocode = async () => {
@@ -154,7 +171,7 @@ Body: ${JSON.stringify(body)}
 
     const get_user_attributes = async () => {
       const id = document.getElementById("userIdValue").value
-      await call_api({
+      const userDetails = await call_api({
         url: `${BASE_URL}/getCognitoUserAttributes/${id}`,
         method: "GET"
       })
@@ -205,10 +222,10 @@ Body: ${JSON.stringify(body)}
     const displayTeamDetails = async (team) => {
       const userDetailsWindow = document.getElementById("team-details");
       
-      console.log('team: ', team);
-      console.log('team.data: ', team.data);
-      console.log('team name: ', team.data['team_name']);
-      console.log('users: ', team.data.users);
+      // console.log('team: ', team);
+      // console.log('team.data: ', team.data);
+      // console.log('team name: ', team.data['team_name']);
+      // console.log('users: ', team.data.users);
       const users = team.data.users
       
 
@@ -294,7 +311,7 @@ Body: ${JSON.stringify(body)}
                   // Reference: https://stackoverflow.com/questions/1085801/get-selected-value-in-dropdown-list-using-javascript
                   
                   data.Users.forEach((element,index) => {
-                    console.log(data.Users[index].providerName);
+                    // console.log(data.Users[index].providerName);
 
                     const emailDropdown = document.getElementById("emailDropdown");
 
@@ -302,14 +319,14 @@ Body: ${JSON.stringify(body)}
                       var option = document.createElement("option");
                       option.text = data.Users[index].providerName;
                       option.value = JSON.stringify(element, null, 2);
-                      console.log('element: ', element);
                       emailDropdown.add(option);
 
                   })
   
                 const userDetails = data.Users;
-                console.log('***USER DETAILS****:', userDetails);
-                // populateEmailDropdown(userDetails);
+                write_response(JSON.stringify(userDetails, null, 2));
+            
+                // EmailDropdown(userDetails);
                 // userDetails.forEach(displayUserDetails);
                 // userDetails.forEach(userDetail => displayUserDetails(userDetail))
                 
@@ -524,4 +541,12 @@ Body: ${JSON.stringify(body)}
       //   option.value = json.data[i];
       //   dropdown.add(option);
       // }
+    }
+
+    const populateInputs = async () => {
+      console.log('button works!');
+      // const firstNameInput = document.querySelector("#firstName");
+      // let firstNameValue = 
+      // console.log(userDetails);
+      // document.getElementById("userId").value = document.getElementById("username");
     }
