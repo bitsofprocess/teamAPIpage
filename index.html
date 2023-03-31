@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1315.0.min.js"></script>
     <script src="credentials.js"></script>
     <script src="functions.js"></script>
@@ -153,21 +154,36 @@
 
                 <div id="create-team" class="tabcontent">
                     <h3>Create Team</h3>
-                    <input type="text" id="firstName" placeholder="firstName" />
-                    <input type="text" id="lastName" placeholder="lastName" />
-                    <input type="text" id="email" placeholder="email" />
-                    <input type="text" id="businessName" placeholder="businessName" />
-                    <input type="text" id="userId" placeholder="userId" />
-                    <button type="submit" onclick="genereate_new_promocode()">
-                      send
-                    </button>
+                        <div style="float:left;margin-right: 20px;">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" placeholder="firstName" />
+                        </div>
+                        <div style="float:left;">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" placeholder="lastName" />
+                        </div>
+                        <div style="float:left;">
+                            <label for="emaile">Email</label>
+                            <input type="text" id="email" placeholder="email" />
+                        </div>
+                        <div style="float:left;">
+                            <label for="businessName">Business/Team Name</label>
+                            <input type="text" id="businessName" placeholder="businessName" />
+                        </div>
+                        <div style="float:left;">
+                            <label for="userId">user ID</label>
+                            <input type="text" id="userId" placeholder="userId" />
+                        </div>
+                        <button type="submit" onclick="genereate_new_promocode()">
+                        send
+                        </button>
                 </div>
 
                 <div id="add-to-team" class="tabcontent">
                     <h3>Add User To Team</h3>
                     <!-- <div class="form"> -->
                       <input type="text" id="add-to-team-user-id" placeholder="userId" />
-                      <input type="text" id="add-to-team-promocode" placeholder="promoCode" />
+                      <input type="text" id="add-to-team-teamcode" placeholder="teamCode" />
                       <button type="submit" onclick="add_user_to_team()">send</button>
                 </div>
 
@@ -175,7 +191,7 @@
                     <h3>Remove User From Team</h3>
                     <!-- <div class="form"> -->
                       <input type="text" id="remove-from-team-user-id" placeholder="userId" />
-                      <input type="text" id="remove-from-team-promocode" placeholder="promoCode" />
+                      <input type="text" id="remove-from-team-teamcode" placeholder="teamCode" />
                       <button type="submit" onclick="remove_from_team()">send</button>
                     <!-- </div> -->
                 </div>
@@ -194,7 +210,7 @@
                     <h3>Get Magic Link</h3>
                     <!-- <div class="form"> -->
                         <input type="text" id="get-team-link-teamCode" placeholder="teamCode" />
-                        <input type="text" id="get-team-link-userName" placeholder="userName" />
+                        <input type="text" id="get-team-link-userId" placeholder="userId" />
                         <button type="submit" onclick="get_team_link()">send</button>
                     <!-- </div> -->
                 </div>
@@ -202,6 +218,9 @@
             </div>
             <div class="inner-bottom">
                 <h2 class="details">Action Details</h2>
+                <div id="action-details">
+                    
+                </div>
             </div>
         </div>
     </div>

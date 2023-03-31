@@ -135,6 +135,7 @@ Body: ${JSON.stringify(body)}
       const userDetailsWindow = document.getElementById("user-details");
       // document.getElementById("user-details")
       userDetailsWindow.innerHTML = 
+        '<h4>Full Name:</h4> ' + '<span id="username">' + userDetails.name + '</span>' +
         '<h4>User Id:</h4> ' + '<span id="username">' + userDetails.Username + '</span>' +
         '<h4>Email:</h4> ' + userDetails.email + 
         '<h4>Team Code:</h4> ' + userDetails["custom:promocode"] +
@@ -142,11 +143,45 @@ Body: ${JSON.stringify(body)}
         '<h4>Provider Name:</h4> ' + userDetails["providerName"];
 
       const button = document.createElement("button");
+      button.type = "submit";
       button.innerHTML = 'Populate';
-      button.onclick = populateInputs();
-
-      userDetailsWindow.appendChild(button);
+      button.onclick = function() {populateActionInputs(userDetails)};
+        // button.addEventListener("click", populateInputs(userDetails));
+      // button.onclick = populateInputs();
+        userDetailsWindow.appendChild(button);
       
+    }
+
+    const displayActionDetails = async (response) => {
+      const userDetailsWindow = document.getElementById("action-details");
+      
+    
+      const teamCode = response.code;
+      const teamName = document.getElementById("businessName").value;
+
+      // console.log({teamCode, teamName});
+
+      let pre = document.createElement("p")
+      pre.style.wordWrap = "break-word"
+      pre.innerHTML +=  
+        '<h4>The team code for </h4> ' + teamName + '<h4> is </h4>' + teamCode;
+
+      if (userDetailsWindow.hasChildNodes()) {
+        userDetailsWindow.insertBefore(pre, userDetailsWindow.childNodes[0])
+      } else {
+        userDetailsWindow.appendChild(pre)
+      }
+
+      // switch(expression) {
+      //   case x:
+      //     // code block
+      //     break;
+      //   case y:
+      //     // code block
+      //     break;
+      //   default:
+      //     // code block
+      // }
     }
 
     const displayFromEmailValue = async () => {
@@ -156,7 +191,7 @@ Body: ${JSON.stringify(body)}
     }
 
     const genereate_new_promocode = async () => {
-      await call_api({
+      const response = await call_api({
         url: `${BASE_URL}/generateNewPromoCode`,
         method: "POST",
         body: {
@@ -167,6 +202,8 @@ Body: ${JSON.stringify(body)}
           userId: document.getElementById("userId").value,
         },
       })
+      // console.log(response);
+      displayActionDetails(response);
     }
 
     const get_user_attributes = async () => {
@@ -181,10 +218,11 @@ Body: ${JSON.stringify(body)}
     const add_user_to_team = async () => {
       const user_id = document.getElementById("add-to-team-user-id").value
       const promocode = document.getElementById("add-to-team-promocode").value
-      await call_api({
+      const response = await call_api({
         url: `${BASE_URL}/checkPromoCode/?userId=${user_id}&promocode=${promocode}`,
         method: "GET",
       })
+      console.log(response);
     }
 
     const remove_from_team = async () => {
@@ -219,20 +257,13 @@ Body: ${JSON.stringify(body)}
       })
     }
 
-    const displayTeamDetails = async (team) => {
+    const displayTeamDetails = async (response) => {
       const userDetailsWindow = document.getElementById("team-details");
-      
-      // console.log('team: ', team);
-      // console.log('team.data: ', team.data);
-      // console.log('team name: ', team.data['team_name']);
-      // console.log('users: ', team.data.users);
-      const users = team.data.users
-      
 
       let pre = document.createElement("p")
       pre.style.wordWrap = "break-word"
       pre.innerHTML +=  
-        '<h4>Business/Team Name:</h4> ' + team.data['team_name'];
+        '<h4>The team code for</h4> ' + response.data['team_name'];
 
       if (userDetailsWindow.hasChildNodes()) {
         userDetailsWindow.insertBefore(pre, userDetailsWindow.childNodes[0])
@@ -317,7 +348,7 @@ Body: ${JSON.stringify(body)}
 
     
                       var option = document.createElement("option");
-                      option.text = data.Users[index].providerName;
+                      option.text = element.providerName;
                       option.value = JSON.stringify(element, null, 2);
                       emailDropdown.add(option);
 
@@ -514,6 +545,43 @@ Body: ${JSON.stringify(body)}
     }
 
 
+    function populateActionInputs(userDetails) {
+      console.log(userDetails);
+
+      const fullName = userDetails.name;
+      const splitName = fullName.split(" ");
+      const firstName = splitName[0];
+      const lastName = splitName[1];
+      const email = userDetails.email;
+      const businessName = userDetails.businessName;
+      const userId = userDetails.Username;
+      const currentTeamCode = userDetails["custom:promocode"];
+
+      //create-team inputs
+      document.querySelector("#firstName").value = firstName;
+      document.querySelector("#lastName").value = lastName;
+      document.querySelector("#email").value = email;
+      document.querySelector("#businessName").value = businessName;
+      document.querySelector("#userId").value = userId;
+
+      // add-to-team-inputs
+      document.querySelector("#add-to-team-user-id").value = userId;
+      document.querySelector("#add-to-team-teamcode").value = currentTeamCode;
+
+      // remove-from-team inputs
+      document.querySelector("#remove-from-team-user-id").value = userId;
+      document.querySelector("#remove-from-team-teamcode").value =
+        currentTeamCode;
+
+      // change-team inputs
+      document.querySelector("#change-team-user-id").value = userId;
+      document.querySelector("#change-team-from").value = currentTeamCode;
+      // document.querySelector("#change-team-to").value;
+
+      // get-team-link inputs
+      document.querySelector("#get-team-link-teamCode").value = currentTeamCode;
+      document.querySelector("#get-team-link-userId").value = userId;
+    }
 
     const populateEmailDropdown = async (userDetails) => {
 
@@ -541,12 +609,4 @@ Body: ${JSON.stringify(body)}
       //   option.value = json.data[i];
       //   dropdown.add(option);
       // }
-    }
-
-    const populateInputs = async () => {
-      console.log('button works!');
-      // const firstNameInput = document.querySelector("#firstName");
-      // let firstNameValue = 
-      // console.log(userDetails);
-      // document.getElementById("userId").value = document.getElementById("username");
     }
