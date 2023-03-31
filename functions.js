@@ -32,6 +32,8 @@ let userName;
 let userId;
 // let userDetails;
 
+// const emailDropdown = document.getElementById("emailDropdown");
+
     const set_search_attribute = () => {
       attributeName = document.getElementById("attributeName").value;
       // console.log(attributeName);
@@ -344,13 +346,15 @@ Body: ${JSON.stringify(body)}
                   data.Users.forEach((element,index) => {
                     // console.log(data.Users[index].providerName);
 
-                    const emailDropdown = document.getElementById("emailDropdown");
+                    // const emailDropdown = document.getElementById("emailDropdown");
 
     
-                      var option = document.createElement("option");
-                      option.text = element.providerName;
-                      option.value = JSON.stringify(element, null, 2);
-                      emailDropdown.add(option);
+                    //   var option = document.createElement("option");
+                    //   option.text = element.providerName;
+                    //   option.value = JSON.stringify(element, null, 2);
+                    //   emailDropdown.add(option);
+
+                    populateEmailDropdown(element);
 
                   })
   
@@ -583,30 +587,14 @@ Body: ${JSON.stringify(body)}
       document.querySelector("#get-team-link-userId").value = userId;
     }
 
-    const populateEmailDropdown = async (userDetails) => {
-
-        userDetails.forEach((element,index) => {
-        console.log(data.Users[index].providerName);
-
-        // var json = { "data": ["orange", "banana", "apple", "pear"] };
+    const populateEmailDropdown = async (userObject) => {
 
         const emailDropdown = document.getElementById("emailDropdown");
 
-        // for (var i = 0; i < json.data.length; i++) {
-          var option = document.createElement("option");
-          option.text = data.Users[index].providerName;
-          option.value = data.Users[index].providerName;
+  
+          let option = document.createElement("option");
+          option.text = userObject.providerName;
+          option.value = JSON.stringify(userObject, null, 2);
           emailDropdown.add(option);
-        })
-      // console.log(object);
-      // var json = { "data": ["orange", "banana", "apple", "pear"] };
-
-      // const emailDropdown = document.getElementById("emailDropdown");
-
-      // for (var i = 0; i < json.data.length; i++) {
-      //   var option = document.createElement("option");
-      //   option.text = json.data[i];
-      //   option.value = json.data[i];
-      //   dropdown.add(option);
-      // }
+          
     }
