@@ -166,6 +166,7 @@ form {
 }
 
 button {
+    /* position: relative; */
     border: 1px solid #ced4da;
     border-radius: 5px;
     padding: 0.4rem;
@@ -185,7 +186,7 @@ button {
 
 input {
     /* padding: 0.375rem 0.75rem; */
-    display: block;
+    /* display: block; */
     position: relative;
     font-size: 1rem;
     font-weight: 400;
@@ -217,7 +218,7 @@ select {
     background-clip: padding-box;
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
-    margin-left: 14px;
+    /* margin-left: 14px; */
     margin-bottom: 15px;
     margin-right: 14px;
 }
@@ -313,3 +314,13 @@ select {
     border-top: none;
   }
   
+  #email-search {
+    border: 1px solid red;
+    background-color: gray;
+  }
+
+  .floating-label {
+    float: left;
+    margin-right: 20px;
+  }
+

@@ -195,7 +195,7 @@ Body: ${JSON.stringify(body)}
       displayUserDetails(userDetails);
     }
 
-    const genereate_new_promocode = async () => {
+    const generate_new_promocode = async () => {
       const response = await call_api({
         url: `${BASE_URL}/generateNewPromoCode`,
         method: "POST",
@@ -262,19 +262,26 @@ Body: ${JSON.stringify(body)}
       })
     }
 
-    const displayTeamDetails = async (response) => {
-      const userDetailsWindow = document.getElementById("team-details");
+    const displayTeamDetails = async (team) => {
+      const teamDetailsWindow = document.getElementById("team-details");
 
       let pre = document.createElement("p")
       pre.style.wordWrap = "break-word"
       pre.innerHTML +=  
-        '<h4>The team code for</h4> ' + response.data['team_name'];
+        '<h4>The team code for</h4> ' + team.data['team_name'];
 
-      if (userDetailsWindow.hasChildNodes()) {
-        userDetailsWindow.insertBefore(pre, userDetailsWindow.childNodes[0])
+      if (teamDetailsWindow.hasChildNodes()) {
+        teamDetailsWindow.insertBefore(pre, teamDetailsWindow.childNodes[0])
       } else {
-        userDetailsWindow.appendChild(pre)
+        teamDetailsWindow.appendChild(pre)
       }
+
+      const button = document.createElement("button");
+      button.type = "submit";
+      button.innerHTML = 'Populate';
+      button.onclick = function() {populateCurrentTeam(team)};
+      
+      teamDetailsWindow.appendChild(button);
     }
 
     const get_team = async () => {
@@ -539,7 +546,7 @@ Body: ${JSON.stringify(body)}
     }
 
 
-    function populateActionInputs(userDetails) {
+    const populateActionInputs = async (userDetails) => {
       console.log(userDetails);
 
       const fullName = userDetails.name;
@@ -577,3 +584,12 @@ Body: ${JSON.stringify(body)}
       document.querySelector("#get-team-link-userId").value = userId;
     }
 
+    const populateCurrentTeam = async (team) => {
+      const currentTeamCode = team.data.team_code;
+
+      document.querySelector("#add-to-team-teamcode").value = currentTeamCode;
+      document.querySelector("#remove-from-team-teamcode").value =
+        currentTeamCode;
+      document.querySelector("#change-team-from").value = currentTeamCode;
+      document.querySelector("#get-team-link-teamCode").value = currentTeamCode;
+    }

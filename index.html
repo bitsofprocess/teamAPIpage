@@ -40,28 +40,33 @@
 
                 <h2>Search by:</h2>
                     <div class="form">
-                        <label for="emailValue" class="input">Email:</label>
-                        <input type="text" id="emailValue" placeholder="userEmail" />
+                        
+                        <div class="floating-label">
+                            <label for="emailValue">Email:</label>
+                            <input type="text" id="emailValue" placeholder="userEmail" />
                         <button type="submit" class="material-symbols-outlined" onclick="getUserByEmail()">
                         search
                         </button>
-                        
-                        <select id="emailDropdown" onchange="displayFromEmailValue()">
-                            <!-- <option value="">-- Account Type --</option>
-                            <option value=""></option>
-                            <option value=""></option>
-                            <option value=""></option> -->
-                        </select>
+                        </div>
+                        <br>
+                        <div class="floating-label">
+                            <label for="emailDropdown">Email Provider:</label>
+                            <select id="emailDropdown" onchange="displayFromEmailValue()">
+                                <option value="">-- Account Types --</option>
+                            </select>
+                        </div>
 
                     </div>
-          
-                    <label for="nameValue" class="input">Name:</label>
-                    <input type="text" id="nameValue" placeholder="ex: John Smith">
-                       
-                        <button type="submit" class="material-symbols-outlined" onclick="listUserByName()">
-                            search
-                        </button>
-                     
+
+                    <div class="floating-label">
+                        <label for="nameValue" class="input">Name:</label>
+                        <input type="text" id="nameValue" placeholder="ex: John Smith">
+                        
+                            <button type="submit" class="material-symbols-outlined" onclick="listUserByName()">
+                                search
+                            </button>
+                    </div>
+
                     <select>
                         <option value="">-- Accounts --</option>
                         <option value="name"></option>
@@ -71,47 +76,16 @@
                     
                     <br>
 
-                    <!-- <div class="form">
-                        <input type="text" id="userIdValue" placeholder="userId" />
-                        <button type="submit" onclick="get_user_attributes()">
-                          submit
-                        </button>
-                    </div> -->
-
-                    <label for="userIdValue" class="input">User ID:</label>
-                    <input type="text" id="userIdValue" placeholder="ex: 0029d107-16df-43a7-9948-9f3fdfe57342"> 
-                       
-                       <button type="submit" class="material-symbols-outlined" onclick="get_user_attributes()">
-                            search
-                        </button>
-                       
+                    <div class="floating-label">
+                        <label for="userIdValue" class="input">User ID:</label>
+                        <input type="text" id="userIdValue" placeholder="ex: 0029d107-16df-43a7-9948-9f3fdfe57342"> 
+                        
+                        <button type="submit" class="material-symbols-outlined" onclick="get_user_attributes()">
+                                search
+                            </button>
+                    </div>
                     <br>
-                    <!-- <div class="form">
-                        <label for="emailValue" class="input">User Email:</label>
-                        <input type="text" id="emailValue" placeholder="userEmail" />
-                        <button type="submit" class="material-symbols-outlined" onclick="getUserByEmail()">
-                        search
-                        </button>
               
-                    </div> -->
-              
-                    <!-- <select>
-                        <option value="">-- Search by --</option>
-                        <option value="userId-attribute">user ID</option>
-                        <option value="email-attribute">email</option>
-                    </select>
-                    <input type="text" id="attributeValue" placeholder="attributeValue">
-                    <button type="submit" class="material-symbols-outlined" onclick="getUserByEmail()">
-                        search
-                        </button>
-             
-
-                    <select>
-                        <option value="">-- Results --</option>
-                        <option value="name"></option>
-                        <option value="Email"></option>
-                        <option value="phone_number"></option>
-                    </select> -->
             </div>
             <div class="inner-bottom">
                 <div class="header-container">
@@ -127,10 +101,13 @@
         <div class="tm-container">
             <div class="inner-top">
                 <h2>Team Search</h2>
-                
-                    <input type="text" id="get-team-teamCode" placeholder="teamCode" />
+
+                <div class="floating-label">
+                    <label for="userIdValue" class="input">Team Code:</label>
+                    <input type="text" id="get-team-teamCode" placeholder="ex: JVUF" />
                     <button type="submit" onclick="get_team()">send</button>
-                
+                </div>
+
             </div>
             <div class="inner-bottom">
                 <div class="header-container">
@@ -154,64 +131,93 @@
 
                 <div id="create-team" class="tabcontent">
                     <h3>Create Team</h3>
-                        <div style="float:left;margin-right: 20px;">
+                        <div class="floating-label">
                             <label for="firstName">First Name</label>
                             <input type="text" id="firstName" placeholder="firstName" />
                         </div>
-                        <div style="float:left;">
+                        <div class="floating-label">
                             <label for="lastName">Last Name</label>
                             <input type="text" id="lastName" placeholder="lastName" />
                         </div>
-                        <div style="float:left;">
+                        <div class="floating-label">
                             <label for="emaile">Email</label>
                             <input type="text" id="email" placeholder="email" />
                         </div>
-                        <div style="float:left;">
+                        <div class="floating-label">
                             <label for="businessName">Business/Team Name</label>
                             <input type="text" id="businessName" placeholder="businessName" />
                         </div>
-                        <div style="float:left;">
+                        <div class="floating-label">
                             <label for="userId">user ID</label>
-                            <input type="text" id="userId" placeholder="userId" />
+                            <input type="text" id="userId" placeholder="ex: 0029d107-16df-43a7-9948-9f3fdfe57342" />
                         </div>
-                        <button type="submit" onclick="genereate_new_promocode()">
-                        send
+                        
+                        <button type="submit" id="createTeam-submit" onclick="generate_new_promocode()">
+                        Submit
                         </button>
                 </div>
 
                 <div id="add-to-team" class="tabcontent">
                     <h3>Add User To Team</h3>
                     <!-- <div class="form"> -->
-                      <input type="text" id="add-to-team-user-id" placeholder="userId" />
-                      <input type="text" id="add-to-team-teamcode" placeholder="teamCode" />
-                      <button type="submit" onclick="add_user_to_team()">send</button>
+                    <div class="floating-label">
+                        <label for="add-to-team-user-id">user ID</label>
+                        <input type="text" id="add-to-team-user-id" placeholder="userId" />
+                    </div>
+                    <div class="floating-label">
+                        <label for="add-to-team-teamcode">Team Code:</label>
+                        <input type="text" id="add-to-team-teamcode" placeholder="teamCode" />
+                    </div>
+                        <button type="submit" onclick="add_user_to_team()">send</button>
                 </div>
 
                 <div id="remove-from-team" class="tabcontent">
                     <h3>Remove User From Team</h3>
                     <!-- <div class="form"> -->
+                    <div class="floating-label">
+                      <label for="remove-from-team-user-id">User ID:</label>
                       <input type="text" id="remove-from-team-user-id" placeholder="userId" />
+                    </div>
+                    <div class="floating-label">
+                        <label for="remove-from-team-teamcode">Remove from (team code):</label>
                       <input type="text" id="remove-from-team-teamcode" placeholder="teamCode" />
-                      <button type="submit" onclick="remove_from_team()">send</button>
+                    </div>
+                      <button type="submit" onclick="remove_from_team()">Submit</button>
                     <!-- </div> -->
                 </div>
 
                 <div id="change-team" class="tabcontent">
                     <h3>Change Team</h3>
                     <!-- <div class="form"> -->
-                      <input type="text" id="change-team-user-id" placeholder="userId" />
-                      <input type="text" id="change-team-from" placeholder="from" />
-                      <input type="text" id="change-team-to" placeholder="to" />
-                      <button type="submit" onclick="change_team()">send</button>
+                      <div class="floating-label">
+                        <label for="change-team-user-id">User ID:</label>
+                        <input type="text" id="change-team-user-id" placeholder="userId" />
+                      </div>
+                      <div class="floating-label">
+                        <label for="change-team-from">Remove from (team code):</label>
+                        <input type="text" id="change-team-from" placeholder="from" />
+                      </div>
+                      <div class="floating-label">
+                        <label for="change-team-to">Add to (team code):</label>
+                        <input type="text" id="change-team-to" placeholder="to" />
+                      </div>
+
+                      <button type="submit" onclick="change_team()">Submit</button>
                     <!-- </div> -->
                   </div>
                 
                 <div id="get-team-link" class="tabcontent">
                     <h3>Get Magic Link</h3>
                     <!-- <div class="form"> -->
-                        <input type="text" id="get-team-link-teamCode" placeholder="teamCode" />
-                        <input type="text" id="get-team-link-userId" placeholder="userId" />
-                        <button type="submit" onclick="get_team_link()">send</button>
+                        <div class="floating-label">
+                            <label for="get-team-link-teamCode">Team Code:</label>
+                            <input type="text" id="get-team-link-teamCode" placeholder="teamCode" />
+                        </div>
+                        <div class="floating-label">
+                            <label for="change-team-to">User ID:</label>
+                            <input type="text" id="get-team-link-userId" placeholder="userId" />
+                        </div>
+                        <button type="submit" onclick="get_team_link()">Submit</button>
                     <!-- </div> -->
                 </div>
 
