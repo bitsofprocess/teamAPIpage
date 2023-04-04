@@ -99,6 +99,29 @@ Body: ${JSON.stringify(body)}
       terminal.appendChild(pre)
     }
 
+    // const call_api = async ({ url, method, body }) => {
+    //   write_request({ url, method, body })
+    //   // toggle_loader(true)
+    //   try {
+    //     const response = fetch(url, {
+    //       method,
+    //       body: JSON.stringify(body),
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //     })
+    //     const data = await response.json();
+    //     userDetails = data;
+    //     write_response(JSON.stringify(data))
+    //     // toggle_loader(false)
+    //     return data;
+    //   } catch (error) {
+    //     write_response(JSON.stringify(error))
+    //     // toggle_loader(false)
+    //   }
+    // }
+
+
     const call_api = async ({ url, method, body }) => {
       write_request({ url, method, body })
       // toggle_loader(true)
@@ -110,8 +133,7 @@ Body: ${JSON.stringify(body)}
             "Content-Type": "application/json",
           },
         })
-        const data = await response.json();
-        userDetails = data;
+        const data = await response.json()
         write_response(JSON.stringify(data))
         // toggle_loader(false)
         return data
@@ -132,6 +154,14 @@ Body: ${JSON.stringify(body)}
         option.value = JSON.stringify(userObject, null, 2);
         emailDropdown.add(option);
         
+  }
+
+  const clearEmailDropdown = async () => {
+
+    const dropDown = document.getElementById("emailDropdown")
+
+    dropDown.options.length = 0;
+
   }
 
     // Reference: https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_onchange
@@ -159,17 +189,27 @@ Body: ${JSON.stringify(body)}
       
     }
 
-    const displayActionDetails = async (response) => {
+    const displayActionDetails = async (actionType, response) => {
       const userDetailsWindow = document.getElementById("action-details");
       
-    
-      const teamCode = response.code;
-      const teamName = document.getElementById("businessName").value;
+      // create team values
+      const create_teamCode = response.code;
+      const create_teamName = document.getElementById("businessName").value;
 
+      //add user values
+      const add_userID = document.getElementById("add-to-team-user-id").value;
+      const add_teamCode = document.getElementById("add-to-team-teamcode").value;
+
+      //remove user values
+      remove_userID = document.getElementById("remove-from-team-user-id").value;
+      remove_teamCode = document.getElementById("remove-from-team-teamcode").value;
+      remove_teamName = response["custom:promodescription"];
+
+      //magic link values
+      magic_teamCode = document.getElementById("get-team-link-teamCode").value;
+      
       let pre = document.createElement("p")
       pre.style.wordWrap = "break-word"
-      pre.innerHTML +=  
-        '<h4>The team code for </h4> ' + teamName + '<h4> is </h4>' + teamCode;
 
       if (userDetailsWindow.hasChildNodes()) {
         userDetailsWindow.insertBefore(pre, userDetailsWindow.childNodes[0])
@@ -177,16 +217,41 @@ Body: ${JSON.stringify(body)}
         userDetailsWindow.appendChild(pre)
       }
 
-      // switch(expression) {
-      //   case x:
-      //     // code block
-      //     break;
-      //   case y:
-      //     // code block
-      //     break;
-      //   default:
-      //     // code block
-      // }
+      switch(actionType) {
+        case 'createTeam':
+          pre.style.wordWrap = "break-word"
+          pre.innerHTML +=  
+            '<h4>The team code for </h4> ' + create_teamName + '<h4> is </h4>' + create_teamCode;
+          break;
+        case 'addUser':
+          pre.style.wordWrap = "break-word"
+          pre.innerHTML +=  
+            '<h4>User: </h4> ' + add_userID + 
+            '<h4> ADDED to Team Code: </h4>' + add_teamCode + 
+            '<h4>for Team: </h4> ' + response.description + 
+            '<h4>Additional Notes: </h4> ' + response.message;
+          break;
+        case 'removeUser':
+          console.log(response);
+          pre.style.wordWrap = "break-word"
+          pre.innerHTML +=  
+          '<h4>User: </h4> ' + remove_userID + 
+          '<h4> REMOVED from Team Code: </h4>' + remove_teamCode + 
+          '<h4>for Team: </h4> ' + remove_teamName + 
+          '<h4>Additional Notes: </h4> ' + response.message;
+          break;
+        case 'changeTeams':
+          // code block
+          break;
+        case 'MagicLink':
+          pre.style.wordWrap = "break-word"
+          pre.innerHTML +=  
+          '<h4>Magic Link: </h4> ' + response.url + 
+          '<h4> for Team Code: </h4>' + magic_teamCode;
+          break;
+        default:
+          // code block
+      }
     }
 
     const displayFromEmailValue = async () => {
@@ -208,7 +273,7 @@ Body: ${JSON.stringify(body)}
         },
       })
 
-      displayActionDetails(response);
+      displayActionDetails('createTeam', response);
     }
 
     const get_user_attributes = async () => {
@@ -222,28 +287,36 @@ Body: ${JSON.stringify(body)}
     
     const add_user_to_team = async () => {
       const user_id = document.getElementById("add-to-team-user-id").value
-      const promocode = document.getElementById("add-to-team-promocode").value
+      const promocode = document.getElementById("add-to-team-teamcode").value
       const response = await call_api({
         url: `${BASE_URL}/checkPromoCode/?userId=${user_id}&promocode=${promocode}`,
         method: "GET",
       })
       console.log(response);
+      displayActionDetails('addUser', response);
     }
 
     const remove_from_team = async () => {
       const userId = document.getElementById("remove-from-team-user-id").value
       const promoCode = document.getElementById(
-        "remove-from-team-promocode"
+        "remove-from-team-teamcode"
       ).value
-      await call_api({
+      const response = await call_api({
         url: `${BASE_URL}/removePlayerFromPromoCode`,
         method: "POST",
         body: { promoCode, userId },
       })
+      console.log(response);
+      displayActionDetails('removeUser', response);
     }
 
     const change_team = async () => {
-      await call_api({
+      const from = document.getElementById("change-team-from").value
+      const to = document.getElementById(
+        "change-team-to"
+      ).value
+
+      const response = await call_api({
         url: `${BASE_URL}/changeTeam`,
         method: "POST",
         headers: {
@@ -251,15 +324,19 @@ Body: ${JSON.stringify(body)}
         },
         body: { from, to, userId },
       })
+
+      console.log(response);
     }
 
     const get_team_link = async () => {
       const teamCode = document.getElementById("get-team-link-teamCode").value
-      const userName = document.getElementById("get-team-link-userName").value
-      await call_api({
+      const userName = document.getElementById("get-team-link-userId").value
+      const response = await call_api({
         url: `${BASE_URL}/getTeamLink/?team_code=${teamCode}&user_name=${userName}`,
         method: "GET",
       })
+
+      displayActionDetails('MagicLink', response);
     }
 
     const displayTeamDetails = async (team) => {
@@ -299,8 +376,11 @@ Body: ${JSON.stringify(body)}
 
 
     const getUserByEmail = async () => {
-      userEmail = document.getElementById("emailValue").value
-  
+
+      clearEmailDropdown();
+
+      userEmail = document.getElementById("emailValue").value;
+
       return new Promise(async (resolve, reject) => {
         const user = {};
     
@@ -453,6 +533,7 @@ Body: ${JSON.stringify(body)}
     }
 
     function listUserByName() {
+      const name = document.getElementById("nameValue").value;
       return new Promise(async (resolve, reject) => {
         const user = {};
     
