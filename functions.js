@@ -191,12 +191,13 @@ const displayActionDetails = async (actionType, response) => {
 
   //add user values
   const add_userID = document.getElementById("add-to-team-user-id").value;
-  const add_teamCode = document.getElementById("add-to-team-teamcode").value;
+  const add_teamCode = document.getElementById("add-to-team-promocode").value;
 
   //remove user values
   remove_userID = document.getElementById("remove-from-team-user-id").value;
-  remove_teamCode = document.getElementById("remove-from-team-teamcode").value;
+  remove_teamCode = document.getElementById("remove-from-team-promocode").value;
   remove_teamName = response["custom:promodescription"];
+  console.log('response', response)
 
   //magic link values
   magic_teamCode = document.getElementById("get-team-link-teamCode").value;
@@ -287,7 +288,7 @@ const add_user_to_team = async () => {
     url: `${BASE_URL}/checkPromoCode/?userId=${user_id}&promocode=${promocode}`,
     method: "GET",
   });
-  console.log('addUser', response);
+  console.log('addUser response: ', response);
 
   displayActionDetails('addUser', response);
 };
@@ -295,12 +296,14 @@ const add_user_to_team = async () => {
 const remove_from_team = async () => {
   const userId = document.getElementById("remove-from-team-user-id").value;
   const promoCode = document.getElementById("remove-from-team-promocode").value;
+ 
   const response = await call_api({
     url: `${BASE_URL}/removePlayerFromPromoCode`,
     method: "POST",
     body: { promoCode, userId },
   });
 
+  console.log('remove response: ', response)
   displayActionDetails('removeUser', response);
 };
 
@@ -644,11 +647,11 @@ function populateActionInputs(userDetails) {
 
   // add-to-team-inputs
   document.querySelector("#add-to-team-user-id").value = userId;
-  document.querySelector("#add-to-team-teamcode").value = currentTeamCode;
+  document.querySelector("#add-to-team-promocode").value = currentTeamCode;
 
   // remove-from-team inputs
   document.querySelector("#remove-from-team-user-id").value = userId;
-  document.querySelector("#remove-from-team-teamcode").value = currentTeamCode;
+  document.querySelector("#remove-from-team-promocode").value = currentTeamCode;
 
   // change-team inputs
   document.querySelector("#change-team-user-id").value = userId;
