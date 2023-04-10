@@ -41,12 +41,12 @@
                 <h2>Search by:</h2>
                     <div class="form">
                         <label for="emailValue" class="input">Email:</label>
-                        <input type="text" id="emailValue" placeholder="userEmail" />
+                        <input type="text" id="emailValue" placeholder="userEmail" onchange="clearEmailDropdown()"/>
                         <button type="submit" class="material-symbols-outlined" onclick="getUserByEmail()">
                         search
                         </button>
                         
-                        <select id="emailDropdown" onchange="displayFromEmailValue()">
+                        <select id="emailDropdown" onclick="displayFromEmailValue()">
                             <!-- <option value="">-- Account Type --</option>
                             <option value=""></option>
                             <option value=""></option>
@@ -174,7 +174,7 @@
                             <label for="userId">user ID</label>
                             <input type="text" id="userId" placeholder="userId" />
                         </div>
-                        <button type="submit" onclick="genereate_new_promocode()">
+                        <button type="submit" onclick="generate_new_promocode()">
                         send
                         </button>
                 </div>

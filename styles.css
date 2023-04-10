@@ -1,23 +1,9 @@
 body {
     font-family: 'Jost', sans-serif;
 }
-label {
-    display: block;
-    font-size: 8px;
-    /* margin-top: 0.25rem;
-    margin-bottom: 0rem; */
-    /* border: 1px solid blue; */
-}
 
 h2 {
-    font-size: 1rem;
-    margin-top: 0.25rem;
-    margin-bottom: 0rem;
-    /* border: 1px solid blue; */
-}
-
-h3 {
-    font-size: 16px;
+    font-size: 20px;
     margin-top: 0.25rem;
     margin-bottom: 0rem;
     /* border: 1px solid blue; */
@@ -93,7 +79,7 @@ h4 {
     padding-left: 1%; 
     /* border: 1px solid red;  */
     /* border-width: 0 1px 1px 0;  */
-    overflow: auto; 
+    overflow: auto;
 }
 
 .inner-bottom {
@@ -185,7 +171,6 @@ button {
 
 input {
     /* padding: 0.375rem 0.75rem; */
-    display: block;
     position: relative;
     font-size: 1rem;
     font-weight: 400;
