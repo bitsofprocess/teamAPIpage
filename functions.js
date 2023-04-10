@@ -151,39 +151,8 @@ const displayUserDetails = async (userDetails) => {
   userDetailsWindow.appendChild(button);
 };
 
-// const displayActionDetails = async (response) => {
-//   const userDetailsWindow = document.getElementById("action-details");
-
-//   const teamCode = response.code;
-//   const teamName = document.getElementById("businessName").value;
-
-//   // console.log({teamCode, teamName});
-
-//   let pre = document.createElement("p");
-//   pre.style.wordWrap = "break-word";
-//   pre.innerHTML +=
-//     "<h4>The team code for </h4> " + teamName + "<h4> is </h4>" + teamCode;
-
-//   if (userDetailsWindow.hasChildNodes()) {
-//     userDetailsWindow.insertBefore(pre, userDetailsWindow.childNodes[0]);
-//   } else {
-//     userDetailsWindow.appendChild(pre);
-//   }
-
-//   // switch(expression) {
-//   //   case x:
-//   //     // code block
-//   //     break;
-//   //   case y:
-//   //     // code block
-//   //     break;
-//   //   default:
-//   //     // code block
-//   // }
-// };
-
 const displayActionDetails = async (actionType, response) => {
-  const userDetailsWindow = document.getElementById("action-details");
+  const actionDetailsWindow = document.getElementById("action-details");
 
   // create team values
   const create_teamCode = response.code;
@@ -197,49 +166,58 @@ const displayActionDetails = async (actionType, response) => {
   remove_userID = document.getElementById("remove-from-team-user-id").value;
   remove_teamCode = document.getElementById("remove-from-team-promocode").value;
   remove_teamName = response["custom:promodescription"];
-  console.log('response', response)
+
+  //change values
+  change_userID = document.getElementById("change-team-user-id").value;
+  change_fromTeamCode = document.getElementById("change-team-from").value;
+  change_toTeamCode = document.getElementById("change-team-to").value;
 
   //magic link values
   magic_teamCode = document.getElementById("get-team-link-teamCode").value;
 
-  let pre = document.createElement("p")
-  pre.style.wordWrap = "break-word"
+  // let pre = document.createElement("p");
+  // pre.style.wordWrap = "break-word";
 
-  if (userDetailsWindow.hasChildNodes()) {
-    userDetailsWindow.insertBefore(pre, userDetailsWindow.childNodes[0])
-  } else {
-    userDetailsWindow.appendChild(pre)
-  }
+  // if (actionDetailsWindow.hasChildNodes()) {
+  //   actionDetailsWindow.insertBefore(pre, actionDetailsWindow.childNodes[0])
+  // } else {
+  //   actionDetailsWindow.appendChild(pre)
+  // }
 
   switch(actionType) {
     case 'createTeam':
-      pre.style.wordWrap = "break-word"
-      pre.innerHTML +=  
+      // pre.style.wordWrap = "break-word"
+      actionDetailsWindow.innerHTML +=  
         '<h4>The team code for </h4> ' + create_teamName + '<h4> is </h4>' + create_teamCode;
       break;
     case 'addUser':
-      pre.style.wordWrap = "break-word"
-      pre.innerHTML +=  
+      // pre.style.wordWrap = "break-word"
+      actionDetailsWindow.innerHTML +=  
         '<h4>User: </h4> ' + add_userID + 
         '<h4> ADDED to Team Code: </h4>' + add_teamCode + 
         '<h4>for Team: </h4> ' + response.description + 
         '<h4>Additional Notes: </h4> ' + response.message;
       break;
     case 'removeUser':
-      console.log(response);
-      pre.style.wordWrap = "break-word"
-      pre.innerHTML +=  
+      // console.log(response);
+      // pre.style.wordWrap = "break-word"
+      actionDetailsWindow.innerHTML +=  
       '<h4>User: </h4> ' + remove_userID + 
       '<h4> REMOVED from Team Code: </h4>' + remove_teamCode + 
       '<h4>for Team: </h4> ' + remove_teamName + 
       '<h4>Additional Notes: </h4> ' + response.message;
       break;
     case 'changeTeams':
-      // code block
+      console.log('change response: ', response);
+      actionDetailsWindow.innerHTML +=  
+      '<h4>User: </h4> ' + change_userID + 
+      '<h4> CHANGED FROM Team Code: </h4>' + change_fromTeamCode + 
+      '<h4>TO Team: </h4> ' + change_toTeamCode + 
+      '<h4>Additional Notes: </h4> ' + response.message;
       break;
     case 'MagicLink':
-      pre.style.wordWrap = "break-word"
-      pre.innerHTML +=  
+      // pre.style.wordWrap = "break-word"
+      actionDetailsWindow.innerHTML +=  
       '<h4>Magic Link: </h4> ' + response.url + 
       '<h4> for Team Code: </h4>' + magic_teamCode;
       break;
@@ -331,7 +309,7 @@ const change_team = async () => {
 
 const get_team_link = async () => {
   const teamCode = document.getElementById("get-team-link-teamCode").value;
-  const userName = document.getElementById("get-team-link-userName").value;
+  const userName = document.getElementById("get-team-link-userId").value;
   const response = await call_api({
     url: `${BASE_URL}/getTeamLink/?team_code=${teamCode}&user_name=${userName}`,
     method: "GET",
