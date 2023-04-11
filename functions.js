@@ -673,4 +673,4 @@ Body: ${JSON.stringify(body)}
         currentTeamCode;
       document.querySelector("#change-team-from").value = currentTeamCode;
       document.querySelector("#get-team-link-teamCode").value = currentTeamCode;
-    }
+    } 
