@@ -6,12 +6,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1315.0.min.js"></script>
     <script src="credentials.js"></script>
-    <script src="functions.js"></script>
+    <!-- <script src="functions.js"></script> -->
     <style>
         body {
             font-family: 'Jost', sans-serif;
@@ -46,6 +47,10 @@
             margin: 0.75rem;
             padding: 0.1rem;
             vertical-align: middle;
+        }
+
+        ul {
+            font-size: 0.75rem;
         }
 
         .top-bar {
@@ -320,18 +325,18 @@
     <title>Document</title>
 
     <script>
-        // AWS.config = new AWS.Config({
-        //     credentials: myCredentials,
-        //     region: "us-east-1",
-        // });
+        AWS.config = new AWS.Config({
+            credentials: myCredentials,
+            region: "us-east-1",
+        });
 
-        // const documentClient = new AWS.DynamoDB.DocumentClient();
-        // const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
+        const documentClient = new AWS.DynamoDB.DocumentClient();
+        const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
 
         const CURRENTSTAGE = "apptest";
         const ENVTABLENAME = "env";
 
-        // let BASE_URL = "https://dmp3yci3ik.execute-api.us-east-1.amazonaws.com/apptest";
+        let BASE_URL = "https://dmp3yci3ik.execute-api.us-east-1.amazonaws.com/apptest";
         let request_log;
         let response_log;
         let team_response_log;
@@ -631,26 +636,62 @@ Body: ${JSON.stringify(body)}
             displayActionDetails('MagicLink', response);
         };
 
+        // function makeList(users, displayWindow) {
+        //     users.forEach(user => {
+        //         // const listItem = document.createElement('li');
+        //         // listItem.textContent = user.name;
+        //         // displayWindow.appendChild(listItem);
+
+        //         // displayWindow.innerHTML += '<li>' + "<h4>User's Name: </h4> " + user.name + '</li>';
+        //         console.log(JSON.stringify(user.name) );
+        //         // return '<li>' + "<h4>User's Name: </h4> " + JSON.stringify(user.name) + '</li>'
+        //     });
+        //     // return '<li>' + "<h4>User's Name: </h4> " + user.name + '</li>'
+        // }
+
+
+        function createListFromJson(users) {
+            // Parse the JSON array into an object
+            // const objArray = JSON.parse(users);
+
+            // Create a new unordered list element
+            const ul = document.createElement('ul');
+
+            // Loop through each object in the array
+            users.forEach((user) => {
+                // Create a new list item element
+                const li = document.createElement('li');
+
+                // Set the text of the list item to the value of the "name" property in the object
+                li.innerText = JSON.stringify(user.name) + "," + JSON.stringify(user.email);
+
+                // Append the list item to the unordered list
+                ul.appendChild(li);
+            });
+
+            // Return the unordered list
+            return ul;
+        }
+
         const displayTeamDetails = async (response) => {
+
             const teamDetailsWindow = document.getElementById("team-details");
+            const users = response.data["users"];
 
-            teamDetails.innerHTML += "<h4>The team code for</h4> " + response.data["team_name"];
+            teamDetailsWindow.innerHTML += "<h4>The team code for</h4> " + response.data["team_name"] +
+                "<h4>End Date: </h4> " + response.data["end_date"] +
+                "<h4>Users: </h4> ";
 
-            // let pre = document.createElement("p");
-            // pre.style.wordWrap = "break-word";
-            // pre.innerHTML += "<h4>The team code for</h4> " + response.data["team_name"];
+            teamDetailsWindow.appendChild(createListFromJson(users))
 
-            // if (userDetailsWindow.hasChildNodes()) {
-            //     userDetailsWindow.insertBefore(pre, userDetailsWindow.childNodes[0]);
-            // } else {
-            //     userDetailsWindow.appendChild(pre);
-            // }
         };
 
         const get_team = async () => {
             // toggle_loader(true)
             const rawTeamCode = document.getElementById("get-team-teamCode").value;
+            console.log(rawTeamCode);
             const teamCode = rawTeamCode.toUpperCase();
+            console.log(teamCode);
             const team = await call_api({
                 url: `${BASE_URL}/getTeam/${teamCode}`,
                 method: "GET",
@@ -809,6 +850,22 @@ Body: ${JSON.stringify(body)}
                                 //     }
                                 //   });
                                 // }
+
+                                data.Users.forEach((element, index) => {
+                                    // console.log(data.Users[index].providerName);
+
+                                    const nameDropdown = document.getElementById("nameDropdown");
+
+                                    console.log('element: ', element);
+                                    // var option = document.createElement("option");
+                                    // option.text = element.providerName;
+                                    // option.value = JSON.stringify(element, null, 2);
+                                    // nameDropdown.add(option);
+                                });
+
+                                const userDetails = data.Users;
+                                write_response(JSON.stringify(userDetails, null, 2));
+
                                 resolve("success");
                             } // successful response
                         });
@@ -859,9 +916,14 @@ Body: ${JSON.stringify(body)}
                             } // an error occurred
                             else {
                                 // console.log(`data: ${JSON.stringify(data, null, 2)}`);
-                                console.log(
-                                    `data.Users: ${JSON.stringify(data.Users[0].Attributes, null, 2)}`
-                                );
+                                const userArray = data.Users;
+                                const nameDropDown = document.getElementById("nameDropdown");
+
+                                populateNameDropdown(userArray, nameDropDown);
+                                // console.log(userArray);
+                                // console.log(
+                                //     `data.Users: ${JSON.stringify(data.Users, null, 2)}`
+                                // );
 
                                 if (data && data.Users && data.Users.length == 0) {
                                     reject("failed");
@@ -989,6 +1051,34 @@ Body: ${JSON.stringify(body)}
 
             dropDown.options.length = 0;
         };
+
+        const populateNameDropdown = async (userArray, dropDown) => {
+            userArray.forEach((element, index) => {
+                console.log(element.Attributes[0].Value);
+
+                // const nameDropdown = document.getElementById("emailDropdown");
+
+
+                var option = document.createElement("option");
+                option.text = element.Attributes[0].Value;
+                option.value = element.Attributes[0].Value;
+                dropDown.add(option);
+            });
+        }
+
+        const populateEmailInput = async () => {
+
+            const emailValue = document.querySelector("#nameDropdown").value;
+            console.log(emailValue);
+            //create-team inputs
+            document.querySelector("#emailValue").value = emailValue;
+            // let emailInput = document.getElementById("emailValue").value;
+
+
+            // emailInput = 'test';
+            // displayUserDetails(userDetails);
+        };
+
     </script>
 
 </head>
@@ -1021,7 +1111,7 @@ Body: ${JSON.stringify(body)}
                         search
                     </button>
 
-                    <select id="emailDropdown" onclick="displayFromEmailValue()">
+                    <select id="emailDropdown" onchange="displayFromEmailValue()" onclick="displayFromEmailValue()">
                         <!-- <option value="">-- Account Type --</option>
                             <option value=""></option>
                             <option value=""></option>
@@ -1037,11 +1127,11 @@ Body: ${JSON.stringify(body)}
                     search
                 </button>
 
-                <select>
-                    <option value="">-- Accounts --</option>
+                <select id="nameDropdown" onclick="populateEmailInput()">
+                    <!-- <option value="">-- Accounts --</option>
                     <option value="name"></option>
                     <option value="Email"></option>
-                    <option value="phone_number"></option>
+                    <option value="phone_number"></option> -->
                 </select>
 
                 <br>
