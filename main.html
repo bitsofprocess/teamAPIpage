@@ -317,6 +317,13 @@
             /* border: 1px solid #ccc; */
             border-top: none;
         }
+
+        .user-key {
+            font-size: 0.5rem;
+            color: #08af54;
+        }
+
+
     </style>
 
     <meta charset="UTF-8">
@@ -663,7 +670,7 @@ Body: ${JSON.stringify(body)}
                 const li = document.createElement('li');
 
                 // Set the text of the list item to the value of the "name" property in the object
-                li.innerText = JSON.stringify(user.name) + "," + JSON.stringify(user.email);
+                li.innerHTML = "Name: " + JSON.stringify(user.name).replace(/"/g,"") + "<br>" + "Email: " + JSON.stringify(user.email).replace(/"/g,"");
 
                 // Append the list item to the unordered list
                 ul.appendChild(li);
