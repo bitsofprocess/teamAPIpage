@@ -1068,15 +1068,10 @@ Body: ${JSON.stringify(body)}
 
         const populateEmailInput = async () => {
 
-            const emailValue = document.querySelector("#nameDropdown").value;
-            console.log(emailValue);
-            //create-team inputs
+            let emailValue = document.querySelector("#nameDropdown").value;
+
             document.querySelector("#emailValue").value = emailValue;
-            // let emailInput = document.getElementById("emailValue").value;
 
-
-            // emailInput = 'test';
-            // displayUserDetails(userDetails);
         };
 
     </script>
@@ -1127,7 +1122,7 @@ Body: ${JSON.stringify(body)}
                     search
                 </button>
 
-                <select id="nameDropdown" onclick="populateEmailInput()">
+                <select id="nameDropdown" onchange="populateEmailInput()">
                     <!-- <option value="">-- Accounts --</option>
                     <option value="name"></option>
                     <option value="Email"></option>
